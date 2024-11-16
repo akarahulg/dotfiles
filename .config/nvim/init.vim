@@ -35,7 +35,6 @@ Plug 'projekt0n/github-nvim-theme'
 call plug#end()
 
 
-
 set title
 set bg=light
 set go=a
@@ -46,7 +45,8 @@ set noshowmode
 set noruler
 set laststatus=0
 set noshowcmd
-colorscheme github_dark_default
+" colorscheme github_dark_default
+colorscheme sorbet
 set background=dark
 " set cursorline
 " hi CursorLine guibg=Grey40

@@ -57,6 +57,9 @@ bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -v '^?' backward-delete-char
 
+bindkey '^[[A' up-line-or-search         # Scroll up
+bindkey '^[[B' down-line-or-search       # Scroll down
+
 # Change cursor shape for different vi modes.
 function zle-keymap-select () {
     case $KEYMAP in

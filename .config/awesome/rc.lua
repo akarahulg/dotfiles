@@ -52,7 +52,7 @@ beautiful.fg_minimize = "#ffffff"
 beautiful.useless_gap = 3
 beautiful.border_width = 4
 beautiful.border_color_normal = someblue
-beautiful.border_color_active = red
+beautiful.border_color_active = yellow
 beautiful.border_color_marked = "#91231C"
 
 -- widgets for wibar
@@ -100,21 +100,21 @@ modkey = "Mod4"
 
 -- {{{ Menu
 -- Create a launcher widget and a main menu
-myawesomemenu = {
-   { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", function() awesome.quit() end },
-}
+-- myawesomemenu = {
+--    { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
+--    { "manual", terminal .. " -e man awesome" },
+--    { "edit config", editor_cmd .. " " .. awesome.conffile },
+--    { "restart", awesome.restart },
+--    { "quit", function() awesome.quit() end },
+-- }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
-                                  }
-                        })
+-- mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+--                                     { "open terminal", terminal }
+--                                   }
+--                         })
 
-mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
-                                     menu = mymainmenu })
+-- mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
+--                                      menu = mymainmenu })
 
 -- Menubar configuration
 -- menubar.utils.terminal = terminal -- Set the terminal for applications that require it
@@ -226,7 +226,7 @@ local spacer = wibox.widget {
 
 screen.connect_signal("request::desktop_decoration", function(s)
     -- Each screen has its own tag table.
-    awful.tag({ "", "2", "3", "4", "5", "6", "7", "8", "9" ,"0"}, s, awful.layout.layouts[2])
+    awful.tag({ "", "2", "3", "4", "5", "6", "7", "8", "9" ,"0"}, s, awful.layout.layouts[5])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -326,7 +326,7 @@ end)
 
 -- {{{ Mouse bindings
 awful.mouse.append_global_mousebindings({
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
+    -- awful.button({ }, 3, function () mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewprev),
     awful.button({ }, 5, awful.tag.viewnext),
 })
