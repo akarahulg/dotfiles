@@ -226,7 +226,7 @@ local spacer = wibox.widget {
 
 screen.connect_signal("request::desktop_decoration", function(s)
     -- Each screen has its own tag table.
-    awful.tag({ "", "2", "3", "4", "5", "6", "7", "8", "9" ,"0"}, s, awful.layout.layouts[5])
+    awful.tag({ "", "", "3", "4", "5", "6", "7", "8", "9" ,"0"}, s, awful.layout.layouts[2])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -466,10 +466,20 @@ awful.keyboard.append_global_keybindings({
               {description = "increase the number of columns", group = "layout"}),
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
-    awful.key({ modkey,           }, "space", function () awful.layout.inc( 1)                end,
+	awful.key({ modkey,  "Shift"         }, "space", function () awful.layout.inc( 1)                end,
               {description = "select next", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
-              {description = "select previous", group = "layout"}),
+    -- awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
+              -- {description = "select previous", group = "layout"}),
+
+    awful.key({ modkey }, "space",
+        function ()
+            if client.focus then
+                client.focus:swap(awful.client.getmaster())
+            end
+        end,
+        {description = "move focused window to master", group = "client"}),
+    -- awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
+              -- {description = "select previous", group = "layout"}),
 
     -- Add keybindings for increasing and decreasing height factor
     awful.key({ modkey, "Control" }, "k",     function () awful.client.incwfact( 0.05)        end,

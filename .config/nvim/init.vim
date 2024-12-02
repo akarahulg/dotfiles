@@ -26,7 +26,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'tc50cal/vim-terminal'
 Plug 'preservim/tagbar'
 Plug 'terryma/vim-multiple-cursors'
-" Plug 'larvag/vitex'
+Plug 'lervag/vimtex'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'preservim/nerdcommenter'
 Plug 'jamessan/vim-gnupg'
@@ -40,9 +40,16 @@ set bg=light
 set go=a
 set mouse=a
 set nohlsearch
+set showmatch
 set clipboard+=unnamedplus
 set noshowmode
+set autoindent
 set noruler
+set tabstop=4
+set shiftwidth=4
+
+" set spell
+" set spelllang=en_us
 set laststatus=0
 set noshowcmd
 " colorscheme github_dark_default
@@ -83,7 +90,6 @@ set background=dark
 
 " For No Previews
 	:set completeopt-=preview
-
 " vim-airline
 	let g:airline_powerline_fonts = 1
 
@@ -205,6 +211,11 @@ vnoremap  <leader>y  "+y
 nnoremap  <leader>Y  "+yg_
 nnoremap  <leader>y  "+y
 nnoremap  <leader>yy  "+yy
+
+" vimtex
+	filetype plugin indent on
+	syntax enable
+	let g:vimtex_view_method='zathura'
 
 " " Paste from clipboard
 nnoremap <leader>p "+p
