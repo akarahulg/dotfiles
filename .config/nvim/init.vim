@@ -20,23 +20,21 @@ Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-commentary'
 Plug 'ap/vim-css-color'
 Plug 'lifepillar/pgsql.vim'
-Plug 'rafi/awesome-vim-colorschemes'
 Plug 'neoclide/coc.nvim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tc50cal/vim-terminal'
 Plug 'preservim/tagbar'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'lervag/vimtex'
+" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'preservim/nerdcommenter'
 Plug 'jamessan/vim-gnupg'
-Plug 'projekt0n/github-nvim-theme'
+Plug 'navarasu/onedark.nvim'
 
 call plug#end()
 
-
 set title
-set bg=light
 set go=a
 set mouse=a
 set nohlsearch
@@ -48,15 +46,21 @@ set noruler
 set tabstop=4
 set shiftwidth=4
 
+let g:onedark_config = {
+  \ 'style': 'deep',
+  \ 'toggle_style_key': '<leader>ts',
+  \ 'ending_tildes': v:true,
+  \ 'diagnostics': {
+    \ 'darker': v:true,
+    \ 'background': v:false,
+  \ },
+\ }
+colorscheme onedark
+
 " set spell
 " set spelllang=en_us
 set laststatus=0
 set noshowcmd
-" colorscheme github_dark_default
-colorscheme sorbet
-set background=dark
-" set cursorline
-" hi CursorLine guibg=Grey40
 " Some basics:
 	nnoremap c "_c
 	filetype plugin on
@@ -222,3 +226,31 @@ nnoremap <leader>p "+p
 nnoremap <leader>P "+P
 vnoremap <leader>p "+p
 vnoremap <leader>P "+P
+
+let g:python3_host_prog = '/usr/bin/python3'
+
+" " Terminal mode
+nnoremap <leader>t :split<CR>:terminal<CR>
+nnoremap <leader>T :vsplit<CR>:terminal<CR>
+tnoremap <Esc> <C-\><C-n>
+autocmd TermOpen * setlocal nonumber norelativenumber signcolumn=no
+
+:tnoremap <A-h> <C-\><C-N><C-w>h
+:tnoremap <A-j> <C-\><C-N><C-w>j
+:tnoremap <A-k> <C-\><C-N><C-w>k
+:tnoremap <A-l> <C-\><C-N><C-w>l
+:inoremap <A-h> <C-\><C-N><C-w>h
+:inoremap <A-j> <C-\><C-N><C-w>j
+:inoremap <A-k> <C-\><C-N><C-w>k
+:inoremap <A-l> <C-\><C-N><C-w>l
+:nnoremap <A-h> <C-w>h
+:nnoremap <A-j> <C-w>j
+:nnoremap <A-k> <C-w>k
+:nnoremap <A-l> <C-w>l
+:nnoremap <A-w> <C-w><C-w>
+
+" Resize splits using Alt + Shift + h/j/k/l
+nnoremap <A-S-h> :vertical resize -5<CR>
+nnoremap <A-S-j> :resize +5<CR>
+nnoremap <A-S-k> :resize -5<CR>
+nnoremap <A-S-l> :vertical resize +5<CR>

@@ -72,6 +72,8 @@ alias \
 	xr="sudo xbps-remove -R" \
 	xq="xbps-query" \
 	z="zathura" \
+	x='exit'\
+	c='clear'\
 	resetcaps='setxkbmap -option' \
 	caps='setxkbmap -option caps:swapescape'
 
