@@ -33,11 +33,13 @@ kiligreen = '#28EB33'
 somegreen = '#016063'
 someblue = '#003787'
 red = "#DC2222"
+manjarogreen = '#4F8A7C'
+
 -- Customize theme settings
 beautiful.font = "Hack Bold 09"
 
 beautiful.bg_normal = "#202828"
-beautiful.bg_focus = someblue
+beautiful.bg_focus = dgreen
 beautiful.bg_urgent = "#901C0F"
 beautiful.bg_minimize = beautiful.bg_normal
 beautiful.wibar_bg = dblue
@@ -49,10 +51,10 @@ beautiful.fg_focus = lgreen
 beautiful.fg_urgent = "#ffffff"
 beautiful.fg_minimize = "#ffffff"
 
-beautiful.useless_gap = 3
-beautiful.border_width = 4
-beautiful.border_color_normal = someblue
-beautiful.border_color_active = yellow
+beautiful.useless_gap = 1
+beautiful.border_width = 3
+beautiful.border_color_normal = '#000000'
+beautiful.border_color_active = kiligreen
 beautiful.border_color_marked = "#91231C"
 
 -- widgets for wibar
@@ -143,6 +145,8 @@ end)
 
 beautiful.wallpaper = home .. "/.config/defaultwallpaper.png"
 -- {{{ Wallpaper
+
+
 screen.connect_signal("request::wallpaper", function(s)
     awful.wallpaper {
         screen = s,
@@ -163,15 +167,14 @@ screen.connect_signal("request::wallpaper", function(s)
 end)
 -- }}}
 
-
 -- {{{ Wallpaper
 if beautiful.wallpaper then
     for s = 1, screen.count() do
-        --gears.wallpaper.maximized(beautiful.wallpaper, s, true)
+        -- gears.wallpaper.maximized(beautiful.wallpaper, s, true)
         if s < 2 then
           gears.wallpaper.maximized(home .. "/.config/defaultwallpaper.png", s, true)
         else
-          gears.wallpaper.maximized(home .. "/.config/distopia_wallpaper.jpg", s, true)
+          gears.wallpaper.maximized(home .. "/.config/protraitwall.jpg", s, true)
         end
     end
 end
@@ -198,8 +201,6 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 mytextclock = wibox.widget.textclock("%a %b %d, %H:%M:%S ", 1)
 
 -- default
-local cw = calendar_widget()
--- or customized
 local cw = calendar_widget({
     theme = 'outrun',
     placement = 'top_right',
@@ -226,7 +227,7 @@ local spacer = wibox.widget {
 
 screen.connect_signal("request::desktop_decoration", function(s)
     -- Each screen has its own tag table.
-    awful.tag({ "", "", "3", "4", "5", "6", "7", "8", "9" ,"0"}, s, awful.layout.layouts[2])
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" ,"0"}, s, awful.layout.layouts[2])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -300,7 +301,6 @@ s.mywibox = awful.wibar {
 	    separator,
 	    -- mykeyboardlayout,
 	    dunstbar,
-	    separator,
 	    updatebar,
 	    separator,
 	    sysbar.ram_widget,
@@ -374,8 +374,8 @@ awful.keyboard.append_global_keybindings({
                   }
               end,
               {description = "lua execute prompt", group = "awesome"}),
-    awful.key({ modkey, }, "Return", function () awful.spawn("xfce4-terminal") end,
-              {description = "open a xfce4-terminal", group = "launcher"}),
+    awful.key({ modkey, }, "Return", function () awful.spawn("kitty") end,
+              {description = "open kitty terminal", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
@@ -431,7 +431,7 @@ awful.keyboard.append_global_keybindings({
             end
         end,
         {description = "go back", group = "client"}),
-    awful.key({ modkey, "Control" }, "m", function () awful.screen.focus_relative( 1) end,
+    awful.key({ modkey, }, "n", function () awful.screen.focus_relative( 1) end,
               {description = "focus the next screen", group = "screen"}),
     awful.key({ modkey, "Control" }, "n", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
