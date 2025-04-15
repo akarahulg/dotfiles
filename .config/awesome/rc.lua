@@ -34,27 +34,33 @@ somegreen = '#016063'
 someblue = '#003787'
 red = "#DC2222"
 manjarogreen = '#4F8A7C'
-
+cyan1= "#028090"
+purple1 = "#820263"
+purple2 = "#6A0136"
+rich1 = "#BBDB9B"
+alabaster = "#E8EBE4"
+tangerine = "#F08700"
+gray = "#3D5A6C"
 -- Customize theme settings
 beautiful.font = "Hack Bold 09"
 
-beautiful.bg_normal = "#202828"
-beautiful.bg_focus = dgreen
+beautiful.bg_normal = "#000000"
+beautiful.bg_focus = purple2
 beautiful.bg_urgent = "#901C0F"
 beautiful.bg_minimize = beautiful.bg_normal
 beautiful.wibar_bg = dblue
-beautiful.wibar_fg = lgreen
+beautiful.wibar_fg = "#AAAAAA"
 beautiful.bg_systray = beautiful.wibar_bg
 
-beautiful.fg_normal = lgreen
-beautiful.fg_focus = lgreen
+beautiful.fg_normal = red
+beautiful.fg_focus = kiligreen
 beautiful.fg_urgent = "#ffffff"
 beautiful.fg_minimize = "#ffffff"
 
-beautiful.useless_gap = 1
+beautiful.useless_gap = 0
 beautiful.border_width = 3
 beautiful.border_color_normal = '#000000'
-beautiful.border_color_active = kiligreen
+beautiful.border_color_active = purple2
 beautiful.border_color_marked = "#91231C"
 
 -- widgets for wibar
@@ -168,17 +174,17 @@ end)
 -- }}}
 
 -- {{{ Wallpaper
-if beautiful.wallpaper then
-    for s = 1, screen.count() do
-        -- gears.wallpaper.maximized(beautiful.wallpaper, s, true)
-        if s < 2 then
-          gears.wallpaper.maximized(home .. "/.config/defaultwallpaper.png", s, true)
-        else
-          gears.wallpaper.maximized(home .. "/.config/protraitwall.jpg", s, true)
-        end
-    end
-end
--- }}}
+-- if beautiful.wallpaper then
+--     for s = 1, screen.count() do
+--         -- gears.wallpaper.maximized(beautiful.wallpaper, s, true)
+--         if s < 2 then
+--           gears.wallpaper.maximized(home .. "/.config/protraitwall.jpg", s, true)
+--         else
+--           gears.wallpaper.maximized(home .. "/.config/defaultwallpaper.png", s, true)
+--         end
+--     end
+-- end
+-- -- }}}
 
 -- -- Create a vertical separator widget
 -- local separator = wibox.widget {
@@ -332,38 +338,41 @@ awful.mouse.append_global_mousebindings({
 })
 -- }}}
 
-local scratchpads = {}  -- Table to hold scratchpad clients
-
--- Function to toggle a window in and out of the scratchpad
-function toggle_scratchpad(c)
-    -- If the window is not already in the scratchpad, move it there
-    if not scratchpads[c.window] then
-        -- Add the client to the scratchpad and minimize it
-        scratchpads[c.window] = c
-        c.hidden = true  -- Hide the window
-    else
-        -- If the client is already in the scratchpad, unminimize it and move it to the current tag
-        c.hidden = false  -- Show the window
-        c:move_to_tag(c.screen.selected_tag)  -- Move it to the currently selected tag
-        client.focus = c  -- Focus the window
-        c:raise()  -- Bring it to the front
-        scratchpads[c.window] = nil  -- Remove it from scratchpad tracking
-    end
-end
-
+-- local scratchpads = {}  -- Table to hold scratchpad clients
+--
+-- -- Function to toggle a window in and out of the scratchpad
+-- function toggle_scratchpad(c)
+--     -- If the window is not already in the scratchpad, move it there
+--     if not scratchpads[c.window] then
+--         -- Add the client to the scratchpad and minimize it
+--         scratchpads[c.window] = c
+--         c.hidden = true  -- Hide the window
+--     else
+--         -- If the client is already in the scratchpad, unminimize it and move it to the current tag
+--         c.hidden = false  -- Show the window
+--         c:move_to_tag(c.screen.selected_tag)  -- Move it to the currently selected tag
+--         client.focus = c  -- Focus the window
+--         c:raise()  -- Bring it to the front
+--         scratchpads[c.window] = nil  -- Remove it from scratchpad tracking
+--     end
+-- end
+--
 
 -- {{{ Key bindings
 
 -- General Awesome keys
 awful.keyboard.append_global_keybindings({
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
-              {description="show help", group="awesome"}),
+    {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
-              {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift"   }, "c", awesome.quit,
-              {description = "quit awesome", group = "awesome"}),
+    awful.key({ modkey, "Control" }, "r", function()
+        naughty.notify({ title = "Debug", text = "Restarting AwesomeWM" })
+        awesome.restart()
+    end,
+    {description = "reload awesome", group = "awesome"}),
+    -- awful.key({ modkey, "Shift"   }, "c", awesome.quit,
+              -- {description = "quit awesome", group = "awesome"}),
     awful.key({ modkey }, "x",
               function ()
                   awful.prompt.run {
@@ -374,29 +383,29 @@ awful.keyboard.append_global_keybindings({
                   }
               end,
               {description = "lua execute prompt", group = "awesome"}),
-    awful.key({ modkey, }, "Return", function () awful.spawn("kitty") end,
-              {description = "open kitty terminal", group = "launcher"}),
-    awful.key({ modkey, "Shift" }, "Return", function () awful.spawn(terminal) end,
-              {description = "open a terminal", group = "launcher"}),
+    -- awful.key({ modkey, }, "Return", function () awful.spawn("kitty") end,
+              -- {description = "open kitty terminal", group = "launcher"}),
+    -- awful.key({ modkey, "Shift" }, "Return", function () awful.spawn(terminal) end,
+              -- {description = "open a terminal", group = "launcher"}),
+    -- awful.key({ modkey }, "d", function() awful.spawn("dmenu_run") end,
+              -- {description = "Run dmenu", group = "launcher"}),
+    -- awful.key({ modkey }, "b", function() awful.spawn("brave") end,
+              -- {description = "Brave browser", group = "launcher"}),
+    -- awful.key({ modkey }, "m", function() awful.spawn("mpc_control -t") end,
+              -- {description = "Music launcher", group = "launcher"}),
+    -- awful.key({ modkey,"Shift" }, "m", function() awful.spawn("dmenu-wrapper-music") end,
+              -- {description = "Music mode selection", group = "launcher"}),
+    -- awful.key({ modkey }, "y", function() awful.spawn("ytsearch") end,
+              -- {description = "dmenu youtube search", group = "launcher"}),
+    -- awful.key({ modkey }, "g", function() awful.spawn("gsearch") end,
+              -- {description = "dmenu google selection", group = "launcher"}),
+    -- awful.key({ modkey }, "p", function() awful.spawn("rofi-pass") end,
+              -- {description = "Rofi password manager", group = "launcher"}),
+    -- awful.key({ modkey, "Shift" }, "d", function ()
+
+	      -- {description = "run rofi with all modes", group = "launcher"})
     awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
-              {description = "run prompt", group = "launcher"}),
-    awful.key({ modkey }, "d", function() awful.spawn("dmenu_run") end,
-              {description = "Run dmenu", group = "launcher"}),
-    awful.key({ modkey }, "b", function() awful.spawn("brave") end,
-              {description = "Brave browser", group = "launcher"}),
-    awful.key({ modkey }, "m", function() awful.spawn("mpc_control -t") end,
-              {description = "Music launcher", group = "launcher"}),
-    awful.key({ modkey,"Shift" }, "m", function() awful.spawn("dmenu-wrapper-music") end,
-              {description = "Music mode selection", group = "launcher"}),
-    awful.key({ modkey }, "y", function() awful.spawn("ytsearch") end,
-              {description = "dmenu youtube search", group = "launcher"}),
-    awful.key({ modkey }, "g", function() awful.spawn("gsearch") end,
-              {description = "dmenu google selection", group = "launcher"}),
-    awful.key({ modkey }, "p", function() awful.spawn("rofi-pass") end,
-              {description = "Rofi password manager", group = "launcher"}),
-    awful.key({ modkey, "Shift" }, "d", function ()
-    		awful.spawn("rofi -show run -modi run,window,drun,ssh") end,
-	      {description = "run rofi with all modes", group = "launcher"})
+              {description = "run prompt", group = "launcher"})
 })
 
 -- Tags related keybindings
@@ -610,7 +619,7 @@ client.connect_signal("request::default_keybindings", function()
                 c:raise()
             end ,
             {description = "(un)maximize vertically", group = "client"}),
-        awful.key({ modkey, "Shift"   }, "m",
+        awful.key({ modkey, "Shift"   }, "-",
             function (c)
                 c.maximized_horizontal = not c.maximized_horizontal
                 c:raise()

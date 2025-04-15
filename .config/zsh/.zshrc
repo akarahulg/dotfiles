@@ -17,7 +17,7 @@ setopt PROMPT_SUBST
 
 # Set the prompt to include vcs_info
 PROMPT='%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[cyan]%} ${vcs_info_msg_0_}%{$fg[red]%}]
- %* %{$reset_color%}$%b '
+ %{$reset_color%}›%b '
 
 
 setopt autocd		# Automatically cd into typed directory.
@@ -120,6 +120,7 @@ unset __conda_setup
 
 #CUSTOM exports
 export PATH=$PATH:/home/rahul/fv5.5.2
+export TERM=xterm-256color
 
 export PATH=$PATH:/home/rahul/TESTING/suitPipeline
 export al1suit=/home/rahul/TESTING/suitPipeline/bash_scripts
@@ -140,7 +141,8 @@ export logo2=$al1suit/../sun_iucaa.png
 export logo3=$al1suit/../iucaaisro.png
 
 export shareddir=/srv/http/shareddir
-alias keyadd='eval $(ssh-agent -s);ssh-add  ~/.ssh/suit226'
+alias keyadd='eval $(ssh-agent -s);ssh-add  ~/.ssh/suit226' 2>/dev/null
+
 
 
 
@@ -152,14 +154,24 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev
 source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh 2>/dev/null
 source /usr/share/zsh/plugins/zsh-you-should-use/you-should-use.plugin.zsh 2>/dev/null
 
+export as1czt=/home/rahul/testarea/astrosat/czti_pipeline/czti
+export PFILES="$PFILES:$as1czt/paramfiles"
+export PATH=$as1czt/bin:$as1czt/scripts:$PATH
+export GLOG_log_dir=$as1czt/log
+export CZTI_templates=$as1czt/templates
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$as1czt/lib
+export PYTHONPATH="$PYTHONPATH:$as1czt/scripts"
+export CXXFLAGS="-fpermissive"
+ulimit -s 65532
 
+export CALDB=/home/rahul/testarea/astrosat/caldb
 
 #heasoft
 export CC=/usr/bin/gcc
 export CXX=/usr/bin/g++
 export FC=/usr/bin/gfortran
 export PERL=/usr/bin/perl
-export PYTHON=/usr/bin/python3
+export PYTHON=/usr/bin/python
 
 #export HEADAS=/home/rahul/packages/heasoft/heasoft-6.33.2/x86_64-pc-linux-gnu-libc2.40/
 #source $HEADAS/headas-init.sh
