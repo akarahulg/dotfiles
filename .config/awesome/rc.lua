@@ -19,6 +19,10 @@ local ruled = require("ruled")
 local hotkeys_popup = require("awful.hotkeys_popup")
 local wibox = require('wibox')
 
+local cyclefocus = require('cyclefocus')
+
+
+
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 purple =  "#6C0533"
@@ -96,7 +100,7 @@ end)
 -- Themes define colours, icons, font and wallpapers.
 
 -- This is used later as the default terminal and editor to run.
-terminal = "st"
+terminal = "kitty"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -432,14 +436,22 @@ awful.keyboard.append_global_keybindings({
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    awful.key({ modkey,           }, "Tab",
-        function ()
-            awful.client.focus.history.previous()
-            if client.focus then
-                client.focus:raise()
-            end
-        end,
-        {description = "go back", group = "client"}),
+  -- modkey+Tab: cycle through all clients.
+awful.key({ modkey }, "Tab", function(c)
+    cyclefocus.cycle({modifier="Super_L"})
+end),
+-- modkey+Shift+Tab: backwards
+awful.key({ modkey, "Shift" }, "Tab", function(c)
+    cyclefocus.cycle({modifier="Super_L"})
+end),
+    -- awful.key({ modkey,           }, "Tab",
+    --     function ()
+    --         awful.client.focus.history.previous()
+    --         if client.focus then
+    --             client.focus:raise()
+    --         end
+    --     end,
+    --     {description = "go back", group = "client"}),
     awful.key({ modkey, }, "n", function () awful.screen.focus_relative( 1) end,
               {description = "focus the next screen", group = "screen"}),
     awful.key({ modkey, "Control" }, "n", function () awful.screen.focus_relative(-1) end,
