@@ -11,7 +11,8 @@ return {
         build_dir = "build",
         options = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "-file-line-error" },
       }
-      vim.g.vimtex_view_method = "zathura"
+      vim.g.vimtex_view_method = "general"
+      vim.g.vimtex_view_general_viewer= "evince"
       vim.g.vimtex_compiler_continuous_automatic = 1
       vim.g.vimtex_syntax_conceal_enabled = 0
     end,
