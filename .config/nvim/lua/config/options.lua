@@ -10,3 +10,6 @@ vim.opt.number = true            -- Show absolute line numbers
 vim.opt.relativenumber = true   -- (Optional) Only absolute, set to true for relative
 vim.opt.cursorline = true -- Highlight the current line
 vim.opt.wrap = false -- Disable line wrapping
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
