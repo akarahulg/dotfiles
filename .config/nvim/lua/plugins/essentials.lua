@@ -32,22 +32,22 @@ return {
 
 	-- Core Syntax Engine (absolutely essential)
 	{
-	  "nvim-treesitter/nvim-treesitter",
-	  build = ":TSUpdate",
-	  config = function()
-	    require("nvim-treesitter.configs").setup({
-	      ensure_installed = {
-	        "c", "lua", "vim", "vimdoc", "query",
-	        "python", "javascript", "typescript", "html", "css"
-	      },
-	      sync_install = false,
-	      highlight = { enable = true },
-	      indent = { enable = true },
-	      -- The two plugins below are now included in nvim-treesitter
-	      -- autotag = { enable = true },
-	      -- textobjects = { enable = true },
-	    })
-	  end,
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				ensure_installed = {
+					"c", "lua", "vim", "vimdoc", "query",
+					"python", "javascript", "typescript", "html", "css"
+				},
+				sync_install = false,
+				highlight = { enable = true },
+				indent = { enable = true },
+				-- The two plugins below are now included in nvim-treesitter
+				-- autotag = { enable = true },
+				-- textobjects = { enable = true },
+			})
+		end,
 	},
 
 	-- Treesitter autotag (auto-close/rename HTML/XML tags)
@@ -74,69 +74,69 @@ return {
 		end,
 	},
 
-	-- Mason-LSPConfig: Bridges Mason with nvim-lspconfig
-	{
-		"williamboman/mason-lspconfig.nvim",
-		dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
-		config = function()
-			-- This setup will automatically install the servers and set up handlers.
-			require("mason-lspconfig").setup({
-				ensure_installed = { "pyright", "tsserver", "cssls", "html", "lua_ls" },
-				handlers = {
-					-- The default handler will call `lspconfig` for each installed server.
-					function(server_name)
-						require("lspconfig")[server_name].setup({})
-					end,
-
-					-- Custom setup for lua_ls to specify runtime settings
-					["lua_ls"] = function()
-						require("lspconfig").lua_ls.setup({
-							settings = {
-								Lua = {
-									runtime = { version = "LuaJIT" },
-									diagnostics = { globals = { "vim" } },
-								},
-							},
-						})
-					end,
-				},
-			})
-		end,
-	},
+	-- -- Mason-LSPConfig: Bridges Mason with nvim-lspconfig
+	-- {
+	-- 	"williamboman/mason-lspconfig.nvim",
+	-- 	dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
+	-- 	config = function()
+	-- 		-- This setup will automatically install the servers and set up handlers.
+	-- 		require("mason-lspconfig").setup({
+	-- 			ensure_installed = { "pyright", "tsserver", "cssls", "html", "lua_ls" },
+	-- 			handlers = {
+	-- 				-- The default handler will call `lspconfig` for each installed server.
+	-- 				function(server_name)
+	-- 					require("lspconfig")[server_name].setup({})
+	-- 				end,
+	--
+	-- 				-- Custom setup for lua_ls to specify runtime settings
+	-- 				["lua_ls"] = function()
+	-- 					require("lspconfig").lua_ls.setup({
+	-- 						settings = {
+	-- 							Lua = {
+	-- 								runtime = { version = "LuaJIT" },
+	-- 								diagnostics = { globals = { "vim" } },
+	-- 							},
+	-- 						},
+	-- 					})
+	-- 				end,
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- },
 
 	-- nvim-lspconfig: The core plugin to configure LSP servers
-	{
-		"neovim/nvim-lspconfig",
-		event = "BufReadPre",
-		config = function()
-			-- This on_attach function will be called for every LSP that attaches to a buffer.
-			-- It's the perfect place to set up LSP-related keybindings.
-			local on_attach = function(client, bufnr)
-				local opts = { noremap = true, silent = true, buffer = bufnr }
-				vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-				vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-				vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-				vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-				vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-				vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
-				vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-				vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, opts)
-			end
-
-			-- Here, we're just overriding the on_attach function for all servers.
-			-- The actual server setup is handled by mason-lspconfig above.
-			local lsp_flags = { debounce_text_changes = 150 }
-			require("lspconfig").util.default_config = vim.tbl_deep_extend(
-				"force",
-				require("lspconfig").util.default_config,
-				{
-					on_attach = on_attach,
-					flags = lsp_flags,
-				}
-			)
-		end
-	},
-
+	-- {
+	-- 	"neovim/nvim-lspconfig",
+	-- 	event = "BufReadPre",
+	-- 	config = function()
+	-- 		-- This on_attach function will be called for every LSP that attaches to a buffer.
+	-- 		-- It's the perfect place to set up LSP-related keybindings.
+	-- 		local on_attach = function(client, bufnr)
+	-- 			local opts = { noremap = true, silent = true, buffer = bufnr }
+	-- 			vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+	-- 			vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+	-- 			vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+	-- 			vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+	-- 			vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+	-- 			vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+	-- 			vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+	-- 			vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, opts)
+	-- 		end
+	--
+	-- 		-- Here, we're just overriding the on_attach function for all servers.
+	-- 		-- The actual server setup is handled by mason-lspconfig above.
+	-- 		local lsp_flags = { debounce_text_changes = 150 }
+	-- 		require("lspconfig").util.default_config = vim.tbl_deep_extend(
+	-- 			"force",
+	-- 			require("lspconfig").util.default_config,
+	-- 			{
+	-- 				on_attach = on_attach,
+	-- 				flags = lsp_flags,
+	-- 			}
+	-- 		)
+	-- 	end
+	-- },
+	--
 	-- nvim-cmp: The completion engine
 	--[[
 	{
