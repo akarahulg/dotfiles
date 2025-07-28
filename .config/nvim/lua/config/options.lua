@@ -6,10 +6,12 @@
 -- You can add your own options here.
 
 -- Set editor options
-vim.opt.number = true            -- Show absolute line numbers
-vim.opt.relativenumber = true   -- (Optional) Only absolute, set to true for relative
-vim.opt.cursorline = true -- Highlight the current line
-vim.opt.wrap = false -- Disable line wrapping
+vim.opt.number = true         -- Show absolute line numbers
+vim.opt.relativenumber = true -- (Optional) Only absolute, set to true for relative
+vim.opt.cursorline = true     -- Highlight the current line
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
+vim.opt.wrap = true
+vim.opt.linebreak = true
+vim.opt.showbreak = "↪ "
