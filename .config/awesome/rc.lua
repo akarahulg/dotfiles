@@ -11,30 +11,11 @@ require("awful.autofocus")
 local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
--- Notification library
-local naughty = require("naughty")
 
-naughty.config.presets.low = {
-	fg = "#ffffff",
-	bg = "#222222",
-	timeout = 5
-}
-
-naughty.config.presets.normal = {
-	fg = "#eeeeee",
-	bg = "#444444"
-}
-
-naughty.config.presets.critical = {
-	fg = "#ffffff",
-	bg = "#ff0000",
-	timeout = 0,
-	border_width = 2,
-	border_color = "#ffffff"
-}
-
-
-
+-- --- REMOVED NAUGHTY ---
+-- The naughty library has been removed to use Dunst instead.
+-- local naughty = require("naughty")
+-- naughty.config.presets.* sections removed.
 
 -- Declarative object management
 local ruled = require("ruled")
@@ -109,14 +90,12 @@ powerbar.bg = purple
 require("awful.hotkeys_popup.keys")
 
 -- {{{ Error handling
--- Check if awesome encountered an error during startup and fell back to
--- another config (This code will only ever execute for the fallback config)
-naughty.connect_signal("request::display_error", function(message, startup)
-	naughty.notification {
-		urgency = "critical",
-		title   = "Oops, an error happened" .. (startup and " during startup!" or "!"),
-		message = message
-	}
+-- --- MODIFIED FOR DUNST ---
+-- Check if awesome encountered an error during startup and use dunstify to show it.
+awesome.connect_signal("request::display_error", function(message, startup)
+	local title = "Oops, an error happened" .. (startup and " during startup!" or "!")
+	-- Use awful.spawn to call dunstify for displaying errors
+	awful.spawn.with_shell("dunstify -u critical '" .. title .. "' '" .. message .. "'")
 end)
 -- }}}
 
@@ -396,7 +375,8 @@ awful.keyboard.append_global_keybindings({
 	awful.key({ modkey, }, "w", function() mymainmenu:show() end,
 		{ description = "show main menu", group = "awesome" }),
 	awful.key({ modkey, "Control" }, "r", function()
-			naughty.notify({ title = "Debug", text = "Restarting AwesomeWM" })
+			-- --- MODIFIED FOR DUNST ---
+			awful.spawn.with_shell('dunstify -u normal -t 2000 "AwesomeWM" "Reloading configuration..."')
 			awesome.restart()
 		end,
 		{ description = "reload awesome", group = "awesome" }),
@@ -776,21 +756,24 @@ end)
 -- }}}
 
 -- {{{ Notifications
+-- --- REMOVED NAUGHTY ---
+-- The following section for naughty rules and layout has been removed.
+-- Dunst will handle its own rules and layout via its dunstrc file.
 
-ruled.notification.connect_signal('request::rules', function()
-	-- All notifications will match this rule.
-	ruled.notification.append_rule {
-		rule       = {},
-		properties = {
-			screen           = awful.screen.preferred,
-			implicit_timeout = 5,
-		}
-	}
-end)
-
-naughty.connect_signal("request::display", function(n)
-	naughty.layout.box { notification = n }
-end)
+-- ruled.notification.connect_signal('request::rules', function()
+-- 	-- All notifications will match this rule.
+-- 	ruled.notification.append_rule {
+-- 		rule       = {},
+-- 		properties = {
+-- 			screen           = awful.screen.preferred,
+-- 			implicit_timeout = 5,
+-- 		}
+-- 	}
+-- end)
+--
+-- naughty.connect_signal("request::display", function(n)
+-- 	naughty.layout.box { notification = n }
+-- end)
 
 -- }}}
 
@@ -807,28 +790,20 @@ awful.spawn.with_shell(
 	'dex --environment Awesome --autostart'
 )
 
--- Screenshot
+-- --- MODIFIED FOR DUNST ---
+-- Screenshot functions now use dunstify
 local function get_timestamp()
 	return os.date("%Y-%m-%d_%H-%M-%S")
 end
 
 local function take_screenshot_region()
-	naughty.notify({
-		preset = naughty.config.presets.normal,
-		title = "   Select the region",
-		timeout = 5
-	})
+	awful.spawn.with_shell("dunstify -u low -t 5000 ' Select the region'")
 	local filename = os.getenv("HOME") .. "/Pictures/Screenshots/screenshot_" .. get_timestamp() .. ".png"
 	local cmd = "maim -s " .. filename
 
 	awful.spawn.easy_async(cmd, function()
 		-- Notify after screenshot is taken
-		naughty.notify({
-			preset = naughty.config.presets.normal,
-			title = "  Screenshot taken",
-			text = "  Saved as " .. filename,
-			timeout = 5
-		})
+		awful.spawn.with_shell("dunstify -u normal -t 5000 ' Screenshot taken' ' Saved as " .. filename .. "'")
 	end)
 end
 
@@ -838,12 +813,7 @@ local function take_screenshot_full()
 
 	awful.spawn.easy_async(cmd, function()
 		-- Notify after screenshot is taken
-		naughty.notify({
-			preset = naughty.config.presets.normal,
-			title = "  Full-Screen Screenshot",
-			text = "  Saved as " .. filename,
-			timeout = 5
-		})
+		awful.spawn.with_shell("dunstify -u normal -t 5000 ' Full-Screen Screenshot' ' Saved as " .. filename .. "'")
 	end)
 end
 

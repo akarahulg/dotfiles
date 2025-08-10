@@ -12,7 +12,6 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 local wibox = require("wibox")
 local gears = require("gears")
-local naughty = require("naughty")
 
 local calendar_widget = {}
 
@@ -86,10 +85,7 @@ local function worker(user_args)
     }
 
     if user_args.theme ~= nil and calendar_themes[user_args.theme] == nil then
-        naughty.notify({
-            preset = naughty.config.presets.critical,
-            title = 'Calendar Widget',
-            text = 'Theme "' .. user_args.theme .. '" not found, fallback to default'})
+        awful.spawn.with_shell("notify-send 'Calendar Widget' 'Theme \"" .. user_args.theme .. "\" not found, fallback to default'")
         user_args.theme = 'naughty'
     end
 
