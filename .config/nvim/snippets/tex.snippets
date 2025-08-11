@@ -150,6 +150,12 @@ snippet vs "vertical space"
 \vspace{$0 \baselineskip}
 endsnippet
 
+snippet bss "bold subsection"
+\subsection*{\bf ${1}}
+endsnippet
+
+
+
 snippet fig "figure environment (includegraphics)"
 	\\begin{figure}
 	\\begin{center}
@@ -165,6 +171,11 @@ snippet item "itemize environment"
 	\\begin{itemize}
 		\\item ${0}
 	\\end{itemize}
+endsnippet
+
+
+snippet it "item"
+	\\item ${0}
 endsnippet
 
 snippet dm "Math" wA
@@ -185,3 +196,23 @@ snippet enum "Enumerate list" b
 \end{enumerate}
 endsnippet
 
+snippet time "Insert current time as HH-MM" b
+`!p import time; snip.rv = time.strftime("%H-%M-%S")`
+endsnippet
+
+snippet tdo "Todo with label" b
+\\todo[label=`!v strftime("%H%M%S")`]{${0:task}}
+endsnippet
+
+snippet sdo "subtodo with label" b
+\\subtodo[label=`!v strftime("%H%M%S")`]{${0:task}}
+endsnippet
+
+
+snippet ddo "done task with label" b
+\\todo[done, label=`!v strftime("%H%M%S")`]{${0:task}}
+endsnippet
+
+snippet dodo "doing task with label" b
+\\todo[doing, label=`!v strftime("%H%M%S")`]{${0:task}}
+endsnippet
