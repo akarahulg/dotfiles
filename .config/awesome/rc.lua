@@ -81,7 +81,7 @@ local dunstbar = require("statusbar.aw-dunst")
 local updatebar = require("statusbar.aw-update")
 local calendar_widget = require("statusbar.aw-calendar")
 local music_widget = musbar.create_music_widget()
-local volume_widget = require('awesome-wm-widgets.pactl-widget.volume')
+local volume_widget = require('statusbar.pactl-widget.volume')
 local volbar = volume_widget { widget_type = 'arc' }
 powerbar.bg = purple
 
