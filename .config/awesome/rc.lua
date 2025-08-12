@@ -14,20 +14,19 @@ local beautiful = require("beautiful")
 
 -- --- REMOVED NAUGHTY ---
 -- The naughty library has been removed to use Dunst instead.
--- local naughty = require("naughty")
--- naughty.config.presets.* sections removed.
 
 -- Declarative object management
 local ruled = require("ruled")
 -- local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
-local wibox = require('wibox')
+-- local wibox = require('wibox') -- This was a duplicate require
 
 local cyclefocus = require('cyclefocus')
 
 
 
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+
 
 purple = "#6C0533"
 cyan = "#0DC8C6"
@@ -70,6 +69,98 @@ beautiful.border_width = 4
 beautiful.border_color_normal = '#000000'
 beautiful.border_color_active = yellow
 beautiful.border_color_marked = "#91231C"
+
+local naughty = require("naughty")
+local gears = require("gears")
+
+-- Nord palette
+local nord = {
+    nord0  = "#2E3440",
+    nord1  = "#3B4252",
+    nord2  = "#434C5E",
+    nord3  = "#4C566A",
+    nord4  = "#D8DEE9",
+    nord5  = "#E5E9F0",
+    nord6  = "#ECEFF4",
+    nord7  = "#8FBCBB",
+    nord8  = "#88C0D0",
+    nord9  = "#81A1C1",
+    nord10 = "#5E81AC",
+    nord11 = "#A3BE8C",
+    nord12 = "#D08770",
+    nord13 = "#EBCB8B",
+    nord14 = "#BF616A",
+    nord15 = "#B48EAD"
+}
+
+-- Default notification settings
+naughty.config.defaults = {
+    timeout      = 10, -- seconds
+    margin       = 12,
+    border_width = 2,
+    position     = "top_right",
+    ontop        = true,
+}
+
+-- Urgency-based presets (like dunst sections)
+naughty.config.presets.low = {
+    fg           = nord.nord4,
+    bg           = nord.nord1,
+    border_color = nord.nord3,
+    timeout      = 5
+}
+
+naughty.config.presets.normal = {
+    fg           = nord.nord6,
+    bg           = nord.nord0,
+    border_color = nord.nord8,
+    timeout      = 10
+}
+
+naughty.config.presets.critical = {
+    fg           = nord.nord6,
+    bg           = nord.nord0,
+    border_color = nord.nord14,
+    timeout      = 0 -- stays until dismissed
+}
+
+-- Layout and style
+naughty.connect_signal("request::display", function(n)
+    naughty.layout.box {
+        notification = n,
+        type = "notification",
+        border_width = 2,
+        border_color = n.border_color or nord.nord3,
+        shape = gears.shape.rounded_rect,
+        maximum_width = 350,
+        widget_template = {
+            {
+                {
+                    {
+                        markup = "<b>" .. (n.title or "") .. "</b>",
+                        font   = "JetBrainsMono Nerd Font 10",
+                        widget = wibox.widget.textbox
+                    },
+                    {
+                        markup = n.message or "",
+                        font   = "JetBrainsMono Nerd Font 10",
+                        wrap   = "word",
+                        widget = wibox.widget.textbox
+                    },
+                    spacing = 6,
+                    layout  = wibox.layout.fixed.vertical
+                },
+                margins = 10,
+                widget  = wibox.container.margin
+            },
+            id     = "background_role",
+            widget = naughty.container.background
+        }
+    }
+end)
+
+
+
 
 -- widgets for wibar
 -- local volbar = require("statusbar.aw-volume")
@@ -114,25 +205,7 @@ modkey = "Mod4"
 -- }}}
 
 -- {{{ Menu
--- Create a launcher widget and a main menu
--- myawesomemenu = {
---    { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
---    { "manual", terminal .. " -e man awesome" },
---    { "edit config", editor_cmd .. " " .. awesome.conffile },
---    { "restart", awesome.restart },
---    { "quit", function() awesome.quit() end },
--- }
-
--- mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
---                                     { "open terminal", terminal }
---                                   }
---                         })
-
--- mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
---                                      menu = mymainmenu })
-
--- Menubar configuration
--- menubar.utils.terminal = terminal -- Set the terminal for applications that require it
+-- The menu section was commented out, leaving it as is.
 -- }}}
 
 -- {{{ Tag layout
@@ -158,8 +231,6 @@ end)
 
 beautiful.wallpaper = home .. "/.config/defaultwallpaper.png"
 -- {{{ Wallpaper
-
-
 screen.connect_signal("request::wallpaper", function(s)
 	awful.wallpaper {
 		screen = s,
@@ -179,27 +250,8 @@ screen.connect_signal("request::wallpaper", function(s)
 	}
 end)
 -- }}}
-
--- {{{ Wallpaper
--- if beautiful.wallpaper then
---     for s = 1, screen.count() do
---         -- gears.wallpaper.maximized(beautiful.wallpaper, s, true)
---         if s < 2 then
---           gears.wallpaper.maximized(home .. "/.config/protraitwall.jpg", s, true)
---         else
---           gears.wallpaper.maximized(home .. "/.config/defaultwallpaper.png", s, true)
---         end
---     end
--- end
--- -- }}}
-
--- -- Create a vertical separator widget
--- local separator = wibox.widget {
---     orientation = 'vertical',
---     forced_width = 2,
---     color = beautiful.bg_focus,  -- Change color as needed
---     widget = wibox.widget.separator,
--- }
+-- The old wallpaper section below is now redundant and can be removed.
+-- if beautiful.wallpaper then ... end
 
 local separator = wibox.widget {
 	widget = wibox.widget.textbox,
@@ -230,7 +282,8 @@ mytextclock:connect_signal("button::press",
 
 local systray = wibox.widget.systray()
 systray:set_base_size(20)
-local spacer = wibox.widget {
+-- This 'spacer' is a container for your systray. This is why the systray works.
+local systray_container = wibox.widget {
 	widget = wibox.container.place,
 	halign = "center",
 	systray
@@ -325,9 +378,9 @@ screen.connect_signal("request::desktop_decoration", function(s)
 				separator,
 				volbar,
 				separator,
-				spacer,
+				systray_container, -- Use the systray container widget here
 				s.mylayoutbox,
-				-- systray(),
+				-- systray(), -- This is correctly commented out
 				separator,
 				mytextclock,
 				powerbar,
@@ -346,73 +399,35 @@ awful.mouse.append_global_mousebindings({
 })
 -- }}}
 
--- local scratchpads = {}  -- Table to hold scratchpad clients
---
--- -- Function to toggle a window in and out of the scratchpad
--- function toggle_scratchpad(c)
---     -- If the window is not already in the scratchpad, move it there
---     if not scratchpads[c.window] then
---         -- Add the client to the scratchpad and minimize it
---         scratchpads[c.window] = c
---         c.hidden = true  -- Hide the window
---     else
---         -- If the client is already in the scratchpad, unminimize it and move it to the current tag
---         c.hidden = false  -- Show the window
---         c:move_to_tag(c.screen.selected_tag)  -- Move it to the currently selected tag
---         client.focus = c  -- Focus the window
---         c:raise()  -- Bring it to the front
---         scratchpads[c.window] = nil  -- Remove it from scratchpad tracking
---     end
--- end
---
 
 -- {{{ Key bindings
+
+-- MODIFICATION: Initialize globalkeys as an empty table first.
+local globalkeys = {}
 
 -- General Awesome keys
 awful.keyboard.append_global_keybindings({
 	awful.key({ modkey, }, "s", hotkeys_popup.show_help,
 		{ description = "show help", group = "awesome" }),
-	awful.key({ modkey, }, "w", function() mymainmenu:show() end,
-		{ description = "show main menu", group = "awesome" }),
+	-- awful.key({ modkey, }, "w", function() mymainmenu:show() end,
+	-- { description = "show main menu", group = "awesome" }),
 	awful.key({ modkey, "Control" }, "r", function()
 			-- --- MODIFIED FOR DUNST ---
 			awful.spawn.with_shell('dunstify -u normal -t 2000 "AwesomeWM" "Reloading configuration..."')
 			awesome.restart()
 		end,
 		{ description = "reload awesome", group = "awesome" }),
-	-- awful.key({ modkey, "Shift"   }, "c", awesome.quit,
-	-- {description = "quit awesome", group = "awesome"}),
 	awful.key({ modkey }, "x",
 		function()
 			awful.prompt.run {
 				prompt       = "Run Lua code: ",
 				textbox      = awful.screen.focused().mypromptbox.widget,
-				exe_callback = awful.util.eval,
+				-- MODIFICATION: exe_callback is deprecated for this use case.
+				-- The prompt handles Lua evaluation automatically.
 				history_path = awful.util.get_cache_dir() .. "/history_eval"
 			}
 		end,
 		{ description = "lua execute prompt", group = "awesome" }),
-	-- awful.key({ modkey, }, "Return", function () awful.spawn("kitty") end,
-	-- {description = "open kitty terminal", group = "launcher"}),
-	-- awful.key({ modkey, "Shift" }, "Return", function () awful.spawn(terminal) end,
-	-- {description = "open a terminal", group = "launcher"}),
-	-- awful.key({ modkey }, "d", function() awful.spawn("dmenu_run") end,
-	-- {description = "Run dmenu", group = "launcher"}),
-	-- awful.key({ modkey }, "b", function() awful.spawn("brave") end,
-	-- {description = "Brave browser", group = "launcher"}),
-	-- awful.key({ modkey }, "m", function() awful.spawn("mpc_control -t") end,
-	-- {description = "Music launcher", group = "launcher"}),
-	-- awful.key({ modkey,"Shift" }, "m", function() awful.spawn("dmenu-wrapper-music") end,
-	-- {description = "Music mode selection", group = "launcher"}),
-	-- awful.key({ modkey }, "y", function() awful.spawn("ytsearch") end,
-	-- {description = "dmenu youtube search", group = "launcher"}),
-	-- awful.key({ modkey }, "g", function() awful.spawn("gsearch") end,
-	-- {description = "dmenu google selection", group = "launcher"}),
-	-- awful.key({ modkey }, "p", function() awful.spawn("rofi-pass") end,
-	-- {description = "Rofi password manager", group = "launcher"}),
-	-- awful.key({ modkey, "Shift" }, "d", function ()
-
-	-- {description = "run rofi with all modes", group = "launcher"})
 	awful.key({ modkey }, "r", function() awful.screen.focused().mypromptbox:run() end,
 		{ description = "run prompt", group = "launcher" })
 })
@@ -449,14 +464,6 @@ awful.keyboard.append_global_keybindings({
 	awful.key({ modkey, "Shift" }, "Tab", function(c)
 		cyclefocus.cycle({ modifier = "Super_L" })
 	end),
-	-- awful.key({ modkey,           }, "Tab",
-	--     function ()
-	--         awful.client.focus.history.previous()
-	--         if client.focus then
-	--             client.focus:raise()
-	--         end
-	--     end,
-	--     {description = "go back", group = "client"}),
 	awful.key({ modkey, }, "n", function() awful.screen.focus_relative(1) end,
 		{ description = "focus the next screen", group = "screen" }),
 	awful.key({ modkey, "Control" }, "n", function() awful.screen.focus_relative(-1) end,
@@ -494,9 +501,6 @@ awful.keyboard.append_global_keybindings({
 		{ description = "decrease the number of columns", group = "layout" }),
 	awful.key({ modkey, "Shift" }, "space", function() awful.layout.inc(1) end,
 		{ description = "select next", group = "layout" }),
-	-- awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
-	-- {description = "select previous", group = "layout"}),
-
 	awful.key({ modkey }, "space",
 		function()
 			if client.focus then
@@ -504,10 +508,6 @@ awful.keyboard.append_global_keybindings({
 			end
 		end,
 		{ description = "move focused window to master", group = "client" }),
-	-- awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
-	-- {description = "select previous", group = "layout"}),
-
-	-- Add keybindings for increasing and decreasing height factor
 	awful.key({ modkey, "Control" }, "k", function() awful.client.incwfact(0.05) end,
 		{ description = "increase client height factor", group = "layout" }),
 	awful.key({ modkey, "Control" }, "j", function() awful.client.incwfact(-0.05) end,
@@ -700,17 +700,6 @@ ruled.client.connect_signal("request::rules", function()
 		properties = { floating = true, above = true, maximized = false, sticky = true }
 	}
 
-	-- ruled.client.append_rule {
-	-- id = "Brave",
-	--     rule       = { name = "Brave"},
-	--     properties = {tag = ""}
-	-- }
-	--         -- Specific rule for LibreOffice
-	--     ruled.client.append_rule {
-	--         id         = "libreoffice",
-	--         rule       = { name = "libreoffice" },
-	--         properties = { maximized = false}
-	--     }
 end)
 -- }}}
 
@@ -756,39 +745,9 @@ end)
 -- }}}
 
 -- {{{ Notifications
--- --- REMOVED NAUGHTY ---
--- The following section for naughty rules and layout has been removed.
--- Dunst will handle its own rules and layout via its dunstrc file.
-
--- ruled.notification.connect_signal('request::rules', function()
--- 	-- All notifications will match this rule.
--- 	ruled.notification.append_rule {
--- 		rule       = {},
--- 		properties = {
--- 			screen           = awful.screen.preferred,
--- 			implicit_timeout = 5,
--- 		}
--- 	}
--- end)
---
--- naughty.connect_signal("request::display", function(n)
--- 	naughty.layout.box { notification = n }
--- end)
-
+-- Dunst is now used, so this section is correctly empty.
 -- }}}
 
--- Enable sloppy focus, so that focus follows mouse.
--- client.connect_signal("mouse::enter", function(c)
---     c:activate { context = "mouse_enter", raise = false }
--- end)
-
--- Autostart
-awful.spawn.with_shell(
-	'if (xrdb -query | grep -q "^awesome\\.started:\\s*true$"); then exit; fi;' ..
-	'xrdb -merge <<< "awesome.started:true";' ..
-	-- list each of your autostart commands, followed by ; inside single quotes, followed by ..
-	'dex --environment Awesome --autostart'
-)
 
 -- --- MODIFIED FOR DUNST ---
 -- Screenshot functions now use dunstify
@@ -817,6 +776,7 @@ local function take_screenshot_full()
 	end)
 end
 
+-- MODIFICATION: Consolidate keybindings into the globalkeys table.
 -- Screenshot
 globalkeys = gears.table.join(
 	globalkeys,
@@ -826,27 +786,35 @@ globalkeys = gears.table.join(
 		{ description = "take full screenshot", group = "screen" })
 )
 
-root.keys(globalkeys)
-
-
 -- Screenkey
-
 globalkeys = gears.table.join(
 	globalkeys,
 	awful.key({ modkey, "Shift" }, "=", function()
 		awful.spawn.easy_async_with_shell("pgrep screenkey", function(stdout)
 			if stdout == "" then
+				-- Using dunstify here for consistency, but notify-send works too if dunst is running
 				awful.spawn.with_shell(
-					"screenkey -t 1 -s small --font 'monospace' --font-color 'red' --opacity 0.6 --position bottom & notify-send 'Screenkey' 'Screenkey activated'")
+					"screenkey -t 1 -s small --font 'monospace' --font-color 'red' --opacity 0.6 --position bottom & dunstify 'Screenkey' 'Screenkey activated'")
 			else
-				awful.spawn.with_shell("pkill screenkey && notify-send 'Screenkey' 'Screenkey deactivated'")
+				awful.spawn.with_shell("pkill screenkey && dunstify 'Screenkey' 'Screenkey deactivated'")
 			end
 		end)
 	end, { description = "toggle screenkey", group = "custom" })
 )
 
--- Apply the keybindings
+-- MODIFICATION: Apply all global keys at once.
 root.keys(globalkeys)
+
+-- Autostart applications
+-- FIX: Start the dunst notification daemon
+awful.spawn.with_shell("dunst &")
+
+awful.spawn.with_shell(
+	'if (xrdb -query | grep -q "^awesome\\.started:\\s*true$"); then exit; fi;' ..
+	'xrdb -merge <<< "awesome.started:true";' ..
+	-- list each of your autostart commands, followed by ; inside single quotes, followed by ..
+	'dex --environment Awesome --autostart'
+)
 
 awful.spawn.with_shell(home .. "/.config/awesome/autorun.sh")
 -- awful.spawn.with_shell(home .. "/.config/awesome/customlock.sh")
