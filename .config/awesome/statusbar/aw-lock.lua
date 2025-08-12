@@ -23,7 +23,7 @@ local power_widget = wibox.widget {
 
 -- Define the dropdown menu items with custom icons and labels
 local menu_items = {
-    { "  Lock", function() awful.spawn.with_shell('locknow') end },
+    { "  Lock", function() awful.spawn.with_shell('betterlockscreen -l dim') end },
     { "  Suspend", function() awful.spawn.with_shell("systemctl suspend") end },
     { "  Reboot", function() awful.spawn.with_shell("systemctl reboot") end },
     { "  Poweroff", function() awful.spawn.with_shell("systemctl poweroff") end },

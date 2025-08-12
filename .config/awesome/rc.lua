@@ -849,6 +849,6 @@ globalkeys = gears.table.join(
 root.keys(globalkeys)
 
 awful.spawn.with_shell(home .. "/.config/awesome/autorun.sh")
-awful.spawn.with_shell(home .. "/.config/awesome/customlock.sh")
+-- awful.spawn.with_shell(home .. "/.config/awesome/customlock.sh")
 awful.spawn.with_shell(home .. "/.config/awesome/active-time")
 awful.spawn.with_shell(home .. "/.config/screenlayout.sh")
