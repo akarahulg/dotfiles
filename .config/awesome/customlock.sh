@@ -1,3 +1,9 @@
 #!/bin/bash
 
-xss-lock --transfer-sleep-lock -- i3lock -k -B 20 --radius 200 --ring-width 20.0 --indicator --{layout,time,date,greeter}-color=FEFEFE88 --{verif,wrong,modif}-color=FEFEFE88 --verif-text="Authenticating..." --wrong-text="Wrong!!!" --noinput-text="No Input" --{date,layout,verif,wrong,greeter}-size=32 --time-size=58 --{time,date,layout,verif,wrong,greeter}-font=Hack --inside-color=0E376D88 --ring-color=44088488 --ringver-color=44088488 --insidever-color=4C5270 --separator-color=44088488 --date-str="%A, %b %d" --time-pos="ix:iy-20" --date-pos="tx:ty+60" --keyhl-color=0B929288 --bshl-color=921F5288 --insidewrong-color=30223B88 --ringwrong-color=4E254A88 --nofork
+xidlehook \
+  --not-when-fullscreen \
+  --not-when-audio \
+  --timer 150 \
+  'betterlockscreen -l dim' \
+  ''
+# xss-lock --transfer-sleep-lock -- i3lock -k -B 20 --radius 200 --ring-width 20.0 --indicator --{layout,time,date,greeter}-color=FEFEFE88 --{verif,wrong,modif}-color=FEFEFE88 --verif-text="Authenticating..." --wrong-text="Wrong!!!" --noinput-text="No Input" --{date,layout,verif,wrong,greeter}-size=32 --time-size=58 --{time,date,layout,verif,wrong,greeter}-font=Hack --inside-color=0E376D88 --ring-color=44088488 --ringver-color=44088488 --insidever-color=4C5270 --separator-color=44088488 --date-str="%A, %b %d" --time-pos="ix:iy-20" --date-pos="tx:ty+60" --keyhl-color=0B929288 --bshl-color=921F5288 --insidewrong-color=30223B88 --ringwrong-color=4E254A88 --nofork
