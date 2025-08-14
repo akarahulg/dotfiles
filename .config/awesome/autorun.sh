@@ -9,3 +9,5 @@ nm-applet &
 xclickroot xmenu_run &
 xset s 540
 xset dpms 600 600 600
+
+

@@ -1,0 +1,135 @@
+#!/bin/bash
+# Track daily active computer time using idle detection (xprintidle)
+# Supports:
+#   - Logging daily totals at midnight
+#   - Handling restarts without losing time
+#   - `active-time status` command for on-demand checking
+#   - Singleton locking
+
+# ---------------- CONFIGURATION ----------------
+UPDATE_INTERVAL=1                     # How often to check for activity, in seconds
+BASE_DIR="$HOME/.local/share/active_time"
+STATE_FILE="$BASE_DIR/state.txt"       # format: YYYY-MM-DD seconds
+LOG_FILE="$BASE_DIR/log.csv"           # format: Date,HH:MM:SS
+LOCK_FILE="/tmp/active_time_tracker.lock"
+TMP_STATUS_FILE="/tmp/active_time_current.out"
+
+# ---------------- FUNCTIONS ----------------
+
+format_time() {
+    local T=$1
+    local H=$((T / 3600))
+    local M=$(((T % 3600) / 60))
+    local S=$((T % 60))
+    printf "%02d:%02d:%02d" "$H" "$M" "$S"
+}
+
+log_day() {
+    local date="$1"
+    local seconds="$2"
+    local formatted
+    formatted=$(format_time "$seconds")
+    echo "$date,$formatted" >> "$LOG_FILE"
+}
+
+read_state() {
+    if [[ -f "$STATE_FILE" ]]; then
+        read -r stored_date stored_seconds < "$STATE_FILE"
+        # Ensure stored_seconds is a valid number, default to 0 if not
+        [[ "$stored_seconds" =~ ^[0-9]+$ ]] || stored_seconds=0
+    else
+        stored_date=$(date +%F)
+        stored_seconds=0
+    fi
+}
+
+save_state() {
+    echo "$(date +%F) $1" > "$STATE_FILE"
+}
+
+status_command() {
+    # Check the temporary status file for the most up-to-date time
+    if [[ -f "$TMP_STATUS_FILE" ]]; then
+        cat "$TMP_STATUS_FILE"
+    else
+        # Fallback to the main state file if the temp file doesn't exist
+        read_state
+        local today
+        today=$(date +%F)
+        if [[ "$stored_date" == "$today" ]]; then
+            format_time "$stored_seconds"
+        else
+            format_time 0
+        fi
+    fi
+}
+
+# ---------------- STATUS CHECK MODE ----------------
+if [[ "$1" == "status" ]]; then
+    status_command
+    exit 0
+fi
+
+# ---------------- PREP ----------------
+mkdir -p "$BASE_DIR"
+[[ -f "$LOG_FILE" ]] || echo "Date,Active Time" > "$LOG_FILE"
+
+if ! command -v xprintidle &>/dev/null; then
+    echo "Error: xprintidle not found. Please install it (e.g., sudo apt install xprintidle)."
+    exit 1
+fi
+
+# Singleton lock: Ensure only one instance of the script runs
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+    # Another instance is already running. Exit silently.
+    exit 0
+fi
+
+read_state
+total_active_sec=$stored_seconds
+last_date=$stored_date
+
+# ---------------- CLEANUP ON EXIT ----------------
+cleanup() {
+    # This function is called when the script receives a signal to terminate
+    # (e.g., on system shutdown or if manually killed).
+    save_state "$total_active_sec"
+    rm -f "$TMP_STATUS_FILE"
+    flock -u 9 # Release the lock
+    exit 0
+}
+trap cleanup SIGINT SIGTERM
+
+# ---------------- MAIN LOOP ----------------
+# Convert update interval to milliseconds for comparison with xprintidle
+readonly UPDATE_INTERVAL_MS=$((UPDATE_INTERVAL * 1000))
+
+while true; do
+    current_date=$(date +%F)
+
+    # Date change handling: If it's a new day, log yesterday's total and reset.
+    if [[ "$current_date" != "$last_date" ]]; then
+        log_day "$last_date" "$total_active_sec"
+        total_active_sec=0
+        last_date="$current_date"
+    fi
+
+    # --- CORE LOGIC ---
+    # Get idle time in milliseconds
+    idle_ms=$(xprintidle)
+
+    # If idle time is less than our check interval, it means there was
+    # activity since the last check. This is the correct way to detect
+    # activity within the last second.
+    if [[ "$idle_ms" -lt "$UPDATE_INTERVAL_MS" ]]; then
+        total_active_sec=$((total_active_sec + UPDATE_INTERVAL))
+    fi
+
+    # Save current state to the main file for persistence across reboots
+    save_state "$total_active_sec"
+    # Save current formatted time to a temp file for instant `status` command access
+    format_time "$total_active_sec" > "$TMP_STATUS_FILE"
+
+    sleep "$UPDATE_INTERVAL"
+done

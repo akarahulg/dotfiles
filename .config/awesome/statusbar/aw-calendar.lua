@@ -2,7 +2,7 @@
 -- Calendar Widget for Awesome Window Manager
 -- Shows the current month and supports scroll up/down to switch month
 -- More details could be found here:
--- https://github.com/streetturtle/awesome-wm-widgets/tree/master/calendar-widget
+-- https://github.com/streetturtle/statusbar/tree/master/calendar-widget
 
 -- @author Pavel Makhov
 -- @copyright 2019 Pavel Makhov
