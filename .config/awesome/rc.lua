@@ -40,7 +40,7 @@ kiligreen = '#28EB33'
 somegreen = '#016063'
 someblue = '#003787'
 red = "#DC2222"
-manjarogreen = '#4F8A7C'
+manjarogreen = '#15B392'
 cyan1 = "#028090"
 purple1 = "#820263"
 purple2 = "#6A0136"
@@ -48,26 +48,28 @@ rich1 = "#BBDB9B"
 alabaster = "#E8EBE4"
 tangerine = "#F08700"
 gray = "#3D5A6C"
+darkteal = '#1A3636'
+lightgreen = '#88D66C'
 -- Customize theme settings
 beautiful.font = "Hack Bold 09"
 
-beautiful.bg_normal = "#000000"
-beautiful.bg_focus = purple2
+beautiful.bg_normal = "#222222"
+beautiful.bg_focus = darkteal
 beautiful.bg_urgent = "#901C0F"
 beautiful.bg_minimize = beautiful.bg_normal
 beautiful.wibar_bg = dblue
 beautiful.wibar_fg = "#AAAAAA"
 beautiful.bg_systray = beautiful.wibar_bg
 
-beautiful.fg_normal = red
-beautiful.fg_focus = kiligreen
+beautiful.fg_normal = manjarogreen
+beautiful.fg_focus = lightgreen
 beautiful.fg_urgent = "#ffffff"
 beautiful.fg_minimize = "#ffffff"
 
 beautiful.useless_gap = 0
 beautiful.border_width = 4
-beautiful.border_color_normal = '#000000'
-beautiful.border_color_active = yellow
+beautiful.border_color_normal = '#222222'
+beautiful.border_color_active = lightgreen
 beautiful.border_color_marked = "#91231C"
 
 local naughty = require("naughty")
