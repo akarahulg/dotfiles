@@ -5,14 +5,14 @@ call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'lervag/vimtex'
 Plug 'preservim/nerdcommenter' " For code commenting powers
-Plug 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 "Plug 'preservim/nerdtree'
 Plug 'nvim-neo-tree/neo-tree.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'MunifTanjim/nui.nvim'
 Plug 'nvim-tree/nvim-web-devicons'
-Plug 'dense-analysis/ale' " Latex linting
+"Plug 'dense-analysis/ale' " Latex linting
 Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown'}
 Plug 'rebelot/kanagawa.nvim'
 Plug 'nvim-lualine/lualine.nvim' " Statusline
@@ -22,11 +22,11 @@ call plug#end()
 " for copy to system clipboard; requires +clipboard
 set clipboard=unnamedplus
 set relativenumber
+set number
 " Configure listchars
 set listchars=tab:\|\ ,trail:·
 " use my custom snippets in place of the default
 "let g:UltiSnipsSnippetDirectories=[$HOME.'/.config/nvim/snippets/']
-
 let g:UltiSnipsExpandTrigger       = '<Tab>'    " use Tab to expand snippets
 let g:UltiSnipsJumpForwardTrigger  = '<Tab>'    " use Tab to move forward through tabstops
 let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'  " use Shift-Tab to move backward through tabstops
