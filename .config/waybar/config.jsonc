@@ -5,9 +5,8 @@
     "height": 26,
 
     // Replaced 'mpris' with 'custom/media'
-    "modules-left": ["niri/workspaces", "custom/media"],
-    "modules-center": ["niri/window"],
-    "modules-right": ["disk", "pulseaudio", "clock", "tray", "custom/power"],
+    "modules-left": ["niri/workspaces", "niri/window"],
+    "modules-right": ["custom/media", "disk", "pulseaudio", "clock", "tray", "custom/power"],
 
     "niri/workspaces": {
         "format": "{icon}",
@@ -45,16 +44,16 @@
         "on-click-right": "pavucontrol"
     },
     "custom/power": {
-        "format": "",
+        "format": " ",
         "tooltip": false,
-        "on-click": "~/.config/waybar/scripts/powermenu.sh"
+        "on-click": "~/.config/waybar/scripts/powermenu"
     },
     // This is the new custom module using your zscroll method
-    "custom/media": {
-      "escape": true,
-      "exec": "~/.config/waybar/scripts/music_panel.sh",
-      "format": " {}", // Changed U+F001 to the actual icon
-      "max-length": 20,
+	"custom/media": {
+      "escape": false, // <-- CHANGED to render Pango markup
+      "exec": "~/.config/waybar/scripts/music_panel",
+      "format": "{}", // <-- CHANGED as script now provides the icon
+      "max-length": 25,
       "on-click": "playerctl play-pause",
       "on-click-right": "playerctl stop",
       "on-scroll-down": "playerctl previous",

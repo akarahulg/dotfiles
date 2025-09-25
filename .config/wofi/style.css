@@ -1,0 +1,29 @@
+/* ~/.config/wofi/style.css */
+
+window {
+    background-color: #1E1E2E;
+    border: 2px solid #89B4FA;
+    /* border-radius: 12px; <-- REMOVED */
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 16px;
+}
+
+#input {
+    margin: 10px;
+    padding: 8px;
+    border: none;
+    /* border-radius: 8px; <-- REMOVED */
+    color: #CDD6F4;
+    background-color: #313244;
+}
+
+#entry {
+    padding: 10px;
+    /* border-radius: 8px; <-- REMOVED */
+    color: #CDD6F4;
+}
+
+#entry:selected {
+    background-color: #89B4FA;
+    color: #1E1E2E;
+}
