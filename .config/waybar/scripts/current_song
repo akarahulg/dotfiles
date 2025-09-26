@@ -7,10 +7,10 @@ ARTIST=$($PLAYERCTL_PATH metadata artist 2> /dev/null)
 TITLE=$($PLAYERCTL_PATH metadata title 2> /dev/null)
 
 if [ "$PLAYER_STATUS" = "" ]; then
-    echo "" # Output nothing if player is offline
+    echo "No Music" # Output nothing if player is offline
 elif [ "$PLAYER_STATUS" = "Stopped" ]; then
-    echo "" # Output nothing if player is stopped
+    echo "No Music" # Output nothing if player is stopped
 else
     # Output the icon and the song info
-    echo "${ARTIST} - ${TITLE}"
+    echo "${ARTIST} - ${TITLE} - ${ARTIST} - ${TITLE} - ${ARTIST} - ${TITLE}"
 fi

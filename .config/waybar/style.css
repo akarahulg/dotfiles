@@ -11,15 +11,15 @@ window#waybar {
     color: #CDD6F4;
 }
 #window, #clock, #disk, #custom-media, #pulseaudio, #tray {
-    padding: 0 10px;
-    margin: 2px 1px;
+    padding: 0 7px;
+    margin: 0px 0px;
 }
 #workspaces {
     padding: 0 5px;
 }
 #workspaces button {
     padding: 0 2px;
-    margin: 2px 2px;
+    margin: 2px 1px;
     min-height: 22px;
     color: #4C566A;
     font-size: 11px;
@@ -38,7 +38,7 @@ window#waybar {
 }
 #custom-power {
     padding: 0 8px;
-    margin: 2px 1px;
+    margin: 0px 0px;
     font-size: 14px;
     color: #FF0000;
     padding-top: 6px;
@@ -52,7 +52,7 @@ window#waybar {
     color: #FAB387;
 }
 /* Style the new custom/media module */
-#custom-media {
+#custom-media, #tray {
     color: #00FF00; /* Green color for the media module */
 	background-color: #313244;
 }
