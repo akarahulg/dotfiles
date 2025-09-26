@@ -6,7 +6,7 @@
 
     // Replaced 'mpris' with 'custom/media'
     "modules-left": ["niri/workspaces", "niri/window"],
-    "modules-right": ["custom/media", "disk", "pulseaudio", "clock", "tray", "custom/power"],
+    "modules-right": ["custom/media", "custom/updates", "disk", "pulseaudio", "clock", "tray", "custom/power"],
 
     "niri/workspaces": {
         "format": "{icon}",
@@ -58,5 +58,12 @@
       "on-click-right": "playerctl -a stop",
       "on-scroll-down": "playerctl previous",
       "on-scroll-up": "playerctl next"
+    },
+	"custom/updates": {
+        "format": "  {}", // Icon + Number Placeholder
+        "exec": "~/.config/waybar/scripts/check-updates",
+        "return-type": "json",
+        "interval": 100, // Check every 30 minutes
+        "on-click": "kitty --hold sudo pacman -Syyu" // Change 'kitty' to your terminal
     }
 }
