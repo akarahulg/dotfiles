@@ -6,7 +6,7 @@
 
     // Replaced 'mpris' with 'custom/media'
     "modules-left": ["niri/workspaces", "niri/window"],
-    "modules-right": ["custom/media", "custom/updates", "disk", "pulseaudio", "clock", "tray", "custom/power"],
+    "modules-right": ["custom/media", "custom/updates", "disk", "pulseaudio", "tray","clock",  "custom/power"],
 
     "niri/workspaces": {
         "format": "{icon}",
