@@ -258,6 +258,13 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
+spawn-at-startup "~/.config/niri/random-niri-wallpaper"
+spawn-at-startup "swayidle" "-w" \
+    "timeout 600 'swaylock -f'" \
+    "timeout 601 'niri msg action power-off-monitors'" \
+    "before-sleep 'swaylock -f'"
+
+
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
@@ -321,11 +328,19 @@ window-rule {
 	default-window-height { fixed 270;}
 }
 
+/-window-rule {
+    match app-id=r#"^thunar$"#
+    match title=r#"^File Operation Progress$"#
+    open-floating true
+	default-column-width { fixed 480;}
+	default-window-height { fixed 150;}
+}
+
 
 
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)
-/-window-rule {
+window-rule {
     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
     match app-id=r#"^org\.gnome\.World\.Secrets$"#
 
@@ -602,3 +617,5 @@ binds {
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
 }
+
+
