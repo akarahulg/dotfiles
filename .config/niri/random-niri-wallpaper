@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# =============================
+#  Bing + Random Wallpaper (Wayland/Sway/swaybg)
+# =============================
+
+# Configurable variables
+WALLPAPER_DIR="$HOME/Pictures/BingWallpapers"
+BING_URL="https://www.bing.com"
+RESOLUTION="1920x1080"   # or "UHD" if supported
+MARKETS=("en-US" "ja-JP" "en-GB" "de-DE" "fr-FR" "zh-CN")
+
+# Create wallpaper directory if missing
+mkdir -p "$WALLPAPER_DIR"
+
+# Infinite loop — fetch & randomize every hour
+while true; do
+    # --- Step 1: Fetch Bing wallpaper ---
+    RANDOM_MKT=${MARKETS[$RANDOM % ${#MARKETS[@]}]}
+    echo "Fetching wallpaper for market: $RANDOM_MKT"
+
+    JSON=$(curl -s "${BING_URL}/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=${RANDOM_MKT}")
+    IMG_URL=$(echo "$JSON" | grep -oP '(?<="url":")[^"]+')
+
+    if [ -n "$IMG_URL" ]; then
+        # Construct the full URL, trying to get a specific resolution if possible
+        # Bing URLs often have a resolution parameter like "_1920x1080.jpg" or similar.
+        # We'll try to replace it or append it.
+        # First, remove any existing resolution or `rf` parameter.
+        CLEAN_IMG_URL=$(echo "$IMG_URL" | sed -E 's/_[0-9]{3,4}x[0-9]{3,4}\.jpg$//' | sed -E 's/&rf=[^&]*//')
+        
+        # Now append our desired resolution.
+        # Note: Bing's actual resolution availability can vary. This is an attempt.
+        FULL_IMG_URL="${BING_URL}${CLEAN_IMG_URL}_${RESOLUTION}.jpg"
+        
+        BASENAME=$(basename "${IMG_URL}" | cut -d'&' -f1) # Original basename might not have resolution
+        FILENAME="${RANDOM_MKT}_${RESOLUTION}_${BASENAME}"
+        FILEPATH="${WALLPAPER_DIR}/${FILENAME}"
+
+        if [ ! -f "$FILEPATH" ]; then
+            echo "Downloading $FILENAME from $FULL_IMG_URL..."
+            # Check if the resolution-specific URL works, if not, try the generic one
+            if ! curl -s --fail -o "$FILEPATH" "$FULL_IMG_URL"; then
+                echo "Failed to download specific resolution. Trying generic URL."
+                GENERIC_FULL_IMG_URL="${BING_URL}${IMG_URL}"
+                FILENAME="${RANDOM_MKT}_${BASENAME}" # Revert to generic filename
+                FILEPATH="${WALLPAPER_DIR}/${FILENAME}"
+                curl -s -o "$FILEPATH" "$GENERIC_FULL_IMG_URL"
+            fi
+        else
+            echo "$FILENAME already exists. Skipping download."
+        fi
+    else
+        echo "No image found for $RANDOM_MKT."
+    fi
+
+    # --- Step 2: Pick a random wallpaper from folder ---
+    WALLPAPER=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.jpeg" \) | shuf -n 1)
+
+    # --- Step 3: Set wallpaper with swaybg ---
+    if [ -n "$WALLPAPER" ]; then
+        echo "Setting wallpaper: $WALLPAPER"
+        # swaybg needs to be run for each output.
+        # The 'output *' tells sway to apply it to all current outputs.
+        # The 'fill' mode stretches the image to fill the screen,
+        # 'fit' scales it down to fit, 'stretch' stretches it, 'center' centers,
+        # 'tile' tiles it. 'fill' is a common choice for wallpapers.
+        swaybg -i "$WALLPAPER" -m fill &
+        # The '&' runs swaybg in the background, which is typical for how swaybg operates.
+        # If you want to kill previous swaybg instances, you might add:
+        # pkill -f "swaybg -i"
+        # right before the swaybg command, but swaybg is usually smart enough to replace.
+    else
+        echo "No wallpaper found in $WALLPAPER_DIR"
+    fi
+
+    # --- Step 4: Sleep for 1 hour (3600 seconds) ---
+    sleep 3600
+done
