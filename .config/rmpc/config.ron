@@ -130,20 +130,8 @@
     tabs: [
         (
             name: "Queue",
-            pane: Split(
-                direction: Horizontal,
-                panes: [
-                (size: "78%", pane: Pane(Queue)), // left column: music list
-                    (size: "22%", pane: Split(            // right column: stacked album art + cava
-                        direction: Vertical,
-                        panes: [
-                            (size: "57%", borders: "ALL", pane: Pane(AlbumArt)), // top: album art
-                            (size: "43%", borders: "ALL", pane: Pane(Cava)),     // bottom: cava
-                        ],
-                    )),
-                ],
-            ),
-        ),
+            pane: Pane(Queue),
+		),
         (
             name: "Directories",
             pane: Pane(Directories),

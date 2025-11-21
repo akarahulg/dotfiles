@@ -40,7 +40,7 @@
         trace: (fg: "magenta", bg: "black"),
     ),
     progress_bar: (
-        symbols: ["[", "·", "·", "·", "]"],  // Center dots with horizontal line for yellow thumb
+        symbols: ["·", "·", "·", "·", "·"],  // Center dots with horizontal line for yellow thumb
         track_style: (fg: "#1e2030"),
         elapsed_style: (fg: "blue"),
         thumb_style: (fg: "yellow"),
@@ -81,31 +81,62 @@
     ],
     components: {
     },
-    layout: Split(
-        direction: Vertical,
-        panes: [
-            (
-                size: "3",
-//                borders: "ALL",
-                pane: Pane(Tabs),
+	layout: Split(
+    direction: Vertical,
+    panes: [
+				(
+    		        size: "3",
+    		        pane: Pane(Tabs),
+    		    ),
+
+				(
+            size: "100%",
+            pane: Pane(TabContent),
+						borders: "ALL",
+        ),
+        (
+            size: "10",
+            pane: Split(
+                direction: Horizontal,
+                panes: [
+                    (
+                        size: "21",
+                        pane: Pane(AlbumArt),
+						borders: "ALL",
+                    ),
+                    (
+                        size: "100%",
+                        pane: Split(
+                            direction: Vertical,
+                            panes: [
+							
+                                (
+                                    size: "5",
+                                    pane: Pane(Header),
+									borders: "ALL",
+                                ),
+								(
+                  				    size: "3",
+                  				    pane: Pane(Cava),
+                  				  ),
+	
+                                (
+                                    size: "1",
+                                    pane: Pane(ProgressBar),
+                                ),
+
+
+                                
+                            ]
+                        )
+                    ),
+					
+                ]
             ),
-            (
-                size: "100%",
-                borders: "ALL",
-                pane: Pane(TabContent),
-            ),
-            (
-                size: "4",
-                borders: "ALL",
-                pane: Pane(Header),
-            ),
-            (
-                size: "1",
-                // borders: "ALL",
-                pane: Pane(ProgressBar),
-            ),
-        ],
-    ),
+        ),
+        
+    ],
+	),
     header: (
          rows: [
             (
@@ -171,6 +202,6 @@
         ),
     ],
     lyrics: (
-        timestamp: true
+        timestamp: false
     )
 )
