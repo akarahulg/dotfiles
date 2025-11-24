@@ -1,0 +1,36 @@
+#!/bin/sh
+
+CACHE="$HOME/.cache/lf/thumbnail.$(stat --printf '%n\0%i\0%F\0%s\0%W\0%Y' \
+	-- "$(readlink -f "$1")" | sha256sum | awk '{print $1}'))"
+draw() {
+  kitten icat --stdin no --transfer-mode memory --place "${w}x${h}@${x}x${y}" "$1" </dev/null >/dev/tty
+  exit 1
+}
+
+file="$1"
+w="$2"
+h="$3"
+x="$4"
+y="$5"
+
+case "$(file -Lb --mime-type "$file")" in 
+  image/*)
+    draw "$file"
+    ;;
+  video/*)
+    [ ! -f "${CACHE}.jpg" ] && \
+        ffmpegthumbnailer -i "$1" -o "${CACHE}.jpg" -s 0 -q 5
+    draw "${CACHE}.jpg"
+    ;;
+  application/pdf)
+      [ ! -f "${CACHE}.jpg" ] && pdftoppm -jpeg -f 1 -singlefile "$file" "$CACHE"
+      draw "${CACHE}.jpg"
+   ;;
+
+	text/html) lynx -width="$4" -display_charset=utf-8 -dump "$1" ;;
+	text/troff) man ./ "$1" | col -b ;;
+	text/* | */xml | application/json | application/x-ndjson) bat -p --theme ansi --terminal-width "$(($4-2))" -f "$1" ;;
+	audio/* | application/octet-stream) mediainfo "$1" || exit 1 ;;
+esac
+
+pistol "$file"
