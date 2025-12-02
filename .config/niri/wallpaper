@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# =============================
+#  Bing Wallpaper (Current Daily) -> Wayland/Sway
+# =============================
+
+# Configurable variables
+WALLPAPER_DIR="$HOME/Pictures/BingWallpapers"
+BING_URL="https://www.bing.com"
+RESOLUTION="1920x1080"   # or "UHD" if supported
+MARKETS=("en-US")
+
+# Create wallpaper directory if missing
+mkdir -p "$WALLPAPER_DIR"
+
+# Infinite loop — fetch & update every hour
+while true; do
+    # --- Step 1: Fetch Bing wallpaper ---
+    # Pick a random market to get some variety in the Daily Image, 
+    # or set this to a static string like "en-US" if you want your local daily image.
+    RANDOM_MKT=${MARKETS[$RANDOM % ${#MARKETS[@]}]}
+    echo "Fetching wallpaper for market: $RANDOM_MKT"
+
+    JSON=$(curl -s "${BING_URL}/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=${RANDOM_MKT}")
+    IMG_URL=$(echo "$JSON" | grep -oP '(?<="url":")[^"]+')
+    
+    # Initialize a variable to hold the final successful file path
+    FINAL_WALLPAPER=""
+
+    if [ -n "$IMG_URL" ]; then
+        # 1. Prepare filenames and URLs
+        CLEAN_IMG_URL=$(echo "$IMG_URL" | sed -E 's/_[0-9]{3,4}x[0-9]{3,4}\.jpg$//' | sed -E 's/&rf=[^&]*//')
+        FULL_IMG_URL="${BING_URL}${CLEAN_IMG_URL}_${RESOLUTION}.jpg"
+        
+        BASENAME=$(basename "${IMG_URL}" | cut -d'&' -f1)
+        FILENAME="${RANDOM_MKT}_${RESOLUTION}_${BASENAME}"
+        FILEPATH="${WALLPAPER_DIR}/${FILENAME}"
+
+        # 2. Download or Verify
+        if [ ! -f "$FILEPATH" ]; then
+            echo "Downloading specific resolution: $FILENAME..."
+            
+            # Try downloading specific resolution
+            if curl -s --fail -o "$FILEPATH" "$FULL_IMG_URL"; then
+                FINAL_WALLPAPER="$FILEPATH"
+            else
+                echo "Failed to download specific resolution. Trying generic URL."
+                
+                # Fallback to generic resolution
+                GENERIC_FULL_IMG_URL="${BING_URL}${IMG_URL}"
+                FILENAME="${RANDOM_MKT}_${BASENAME}"
+                FILEPATH="${WALLPAPER_DIR}/${FILENAME}"
+                
+                curl -s -o "$FILEPATH" "$GENERIC_FULL_IMG_URL"
+                FINAL_WALLPAPER="$FILEPATH"
+            fi
+        else
+            echo "$FILENAME already exists. Using it."
+            FINAL_WALLPAPER="$FILEPATH"
+        fi
+    else
+        echo "No image URL found in JSON response."
+    fi
+
+    # --- Step 2: Set the SPECIFIC downloaded wallpaper ---
+    if [ -n "$FINAL_WALLPAPER" ] && [ -f "$FINAL_WALLPAPER" ]; then
+        echo "Setting wallpaper: $FINAL_WALLPAPER"
+        
+        # IMPORTANT: Kill old swaybg instances to prevent memory leaks/duplicate processes
+        # We ignore errors (2>/dev/null) in case swaybg isn't running yet
+        pkill swaybg 2>/dev/null
+        
+        # Start new swaybg
+        swaybg -i "$FINAL_WALLPAPER" -m fill &
+    else
+        echo "Could not determine a valid wallpaper to set."
+    fi
+
+    # --- Step 3: Sleep for 1 hour (3600 seconds) ---
+    sleep 86400
+done
