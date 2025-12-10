@@ -73,6 +73,9 @@ export NNN_PLUG='f:finder;o:fzopen;p:mocq;d:diffs;t:nmount;v:imgview'
 #swap caps and escape
 setxkbmap -option caps:swapescape
 
+#xset speed
+xset r rate 300 60
+
 # Start graphical server on user's current tty if not already running.
 # [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
 
