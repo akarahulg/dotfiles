@@ -166,7 +166,6 @@ end)
 
 -- widgets for wibar
 -- local volbar = require("statusbar.aw-volume")
-local activebar = require("statusbar.aw-active-time")
 local sysbar = require("statusbar.aw-system")
 local musbar = require("statusbar.aw-music-compact")
 local powerbar = require("statusbar.aw-lock")
@@ -369,7 +368,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
 				separator,
 				-- mykeyboardlayout,
 				dunstbar,
-				activebar,
 				updatebar,
 				separator,
 				sysbar.ram_widget,
@@ -619,6 +617,16 @@ client.connect_signal("request::default_keybindings", function()
 			{ description = "move to screen", group = "client" }),
 		awful.key({ modkey, }, "t", function(c) c.ontop = not c.ontop end,
 			{ description = "toggle keep on top", group = "client" }),
+		awful.key({ modkey, "Shift" }, "t", 
+    		function ()
+        	local c = client.focus
+        	if c then
+            c.floating = true     -- make floating
+            c.ontop = true        -- always on top
+            c.sticky = true       -- visible on all tags
+        	end
+    		end,
+    		{description = "make focused window floating, ontop, sticky", group = "client"}),
 		awful.key({ modkey, }, "]",
 			function(c)
 				-- The client currently has the input focus, so it cannot be
@@ -820,5 +828,4 @@ awful.spawn.with_shell(
 
 awful.spawn.with_shell(home .. "/.config/awesome/autorun.sh")
 awful.spawn.with_shell(home .. "/.config/awesome/customlock.sh")
-awful.spawn.with_shell(home .. "/.config/awesome/active-time")
 awful.spawn.with_shell(home .. "/.config/screenlayout.sh")
