@@ -124,9 +124,10 @@ export TERM=xterm-256color
 
 export PATH=$PATH:/home/rahul/TESTING/suitPipeline
 export al1suit=/home/rahul/TESTING/suitPipeline/bash_scripts
-export suitproduct=/home/rahul/data2/suitproducts
-export qldinfolder=/home/rahul/data2/suitproducts/archive
-export suitdata=/home/rahul/data2/suit_data
+export suitproduct=/mnt/data/suitproducts
+export suitdata=/mnt/data/suit_data
+
+
 
 #export suitspice=/home/rahul/Downloads/SPICE/kernels
 export suitspice="/home/rahul/TESTING/SPICE/kernels"
