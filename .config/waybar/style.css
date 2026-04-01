@@ -18,8 +18,8 @@ window#waybar {
     padding: 0 5px;
 }
 #workspaces button {
-    padding: 0 2px;
-    margin: 2px 1px;
+    padding: 0 1px;
+    margin: 1px 1px;
     min-height: 22px;
     color: #4C566A;
     font-size: 11px;
@@ -51,8 +51,36 @@ window#waybar {
 #pulseaudio.muted {
     color: #FAB387;
 }
+
 /* Style the new custom/media module */
 #custom-media, #tray {
     color: #00FF00; /* Green color for the media module */
 	background-color: #313244;
 }
+/* Default state (Empty tags) */
+#tags button {
+    color: #666666; 
+    background: transparent;
+	margin: 0 2px;
+	padding: 0 2px;
+	border: none;
+}
+
+/* Tags that have windows in them, but aren't currently focused */
+#tags button.occupied {
+    color: #b3b3b3; 
+}
+
+/* The tag you are currently viewing */
+#tags button.focused {
+    color: #ffbd00; /* Bright white for active */
+    border-radius: 100px;
+	font-weight: bold;
+}
+
+/* Tags demanding attention */
+#tags button.urgent {
+    color: #ff5555; 
+}
+
+

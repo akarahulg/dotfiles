@@ -2,27 +2,21 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 26,
+    "height": 32,
 
-    "modules-left": ["ext/workspaces", "wlr/taskbar", "dwl/window"],
+    // Replaced ext/workspaces with dwl/tags
+    "modules-left": ["dwl/tags", "wlr/taskbar", "dwl/window"],
     "modules-right": ["custom/media", "custom/updates", "disk", "pulseaudio", "tray", "clock", "custom/power"],
 
-    "ext/workspaces": {
-        "format": "{icon}",
-        "ignore-hidden": true,
-        "on-click": "activate",
-        "on-click-right": "deactivate",
-		"on-scroll-up": "mmsg -d viewtoleft_have_client",
-		"on-scroll-down": "mmsg -d viewtoright_have_client",
-        "sort-by-id": true,
-		"format-icons": {
-			"active": "",
-			"default": "",
-			"urgent": ""
-		}
+	"dwl/tags": {
+        "num-tags": 9,
+		"format":"{}",
+        "tag-labels": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+        "on-scroll-up": "mmsg -d viewtoleft_have_client",
+        "on-scroll-down": "mmsg -d viewtoright_have_client"
     },
 
-    // ---- TASKBAR (added as requested) ----
+    // ---- TASKBAR ----
     "wlr/taskbar": {
         "format": "{icon}",
         "icon-size": 16,
@@ -31,7 +25,7 @@
         "on-click-right": "close"
     },
 
-    // ---- WINDOW (was niri/window) ----
+    // ---- WINDOW ----
     "dwl/window": {
         "format": "{}",
         "max-length": 50
