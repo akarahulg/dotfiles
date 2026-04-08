@@ -6,7 +6,8 @@
 
     // Replaced ext/workspaces with dwl/tags
     "modules-left": ["dwl/tags", "wlr/taskbar", "dwl/window"],
-    "modules-right": ["custom/media", "custom/updates", "disk", "pulseaudio", "tray", "clock", "custom/power"],
+    "modules-right": ["custom/media", "custom/updates", "disk", "pulseaudio", "tray", "custom/layout",
+		"clock", "custom/power"],
 
 	"dwl/tags": {
         "num-tags": 9,
@@ -30,9 +31,15 @@
         "format": "{}",
         "max-length": 50
     },
+	
+
+	"custom/layout": {
+		"exec": "~/.config/waybar/scripts/mango-layout",
+		"interval": 1,
+		"tooltip": false
+	},
 
     "tray": {
-        "icon-theme": "Papirus",
         "icon-size": 16,
         "spacing": 10
     },
