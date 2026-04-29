@@ -13,10 +13,12 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'MunifTanjim/nui.nvim'
 Plug 'nvim-tree/nvim-web-devicons'
 "Plug 'dense-analysis/ale' " Latex linting
-Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown'}
+"Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown'}
 Plug 'rebelot/kanagawa.nvim'
 Plug 'nvim-lualine/lualine.nvim' " Statusline
 Plug 'folke/which-key.nvim'
+Plug 'ledger/vim-ledger'
+Plug 'Exafunction/codeium.vim'
 call plug#end()
 
 " for copy to system clipboard; requires +clipboard
@@ -34,7 +36,16 @@ let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'  " use Shift-Tab to move backward
 inoremap <expr> <CR> pumvisible() ? coc#_select_confirm() : "<CR>"
 let g:vimtex_quickfix_open_on_warning = 0
 
-nnoremap <C-n> :Neotree toggle<CR>
+" Codium
+let g:codeium_enabled = v:true
+imap <silent><script><expr> <C-g> codeium#Accept()
+
+"Neotree
+nnoremap <leader>e :Neotree filesystem reveal left toggle<CR>
+nnoremap <leader>t :Neotree focus<CR>
+nnoremap <leader>b <C-^>
+nnoremap <leader>f :Neotree reveal<CR>
+
 
 colorscheme kanagawa
 " jump to the last position when reopening a file
@@ -69,3 +80,9 @@ call luaeval('require("lualine").setup(_A)', {
   \ },
 \ })
 
+"Ledger
+au BufRead,BufNewFile *.dat set filetype=ledger
+let g:ledger_align_at = 52
+let g:ledger_fill_account = 1
+nnoremap <leader>lb :!ledger -f % bal<CR>
+nnoremap <leader>txn o<C-r>=strftime("%Y/%m/%d")<CR> <Esc>o    <Esc>o    <Esc>k
