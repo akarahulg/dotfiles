@@ -1,23 +1,35 @@
 #!/bin/bash
 
-options="⏻ Shutdown\n Reboot\n Logout\n⏾ Hibernate\n Lock"
+options="󰐥  Shutdown
+󰜉  Reboot
+󰍃  Logout
+󰤄  Suspend
+󰒲  Hibernate
+󰌾  Lock"
 
-chosen=$(echo -e "$options" | fuzzel --dmenu --width 20 --lines 5 --anchor top-right --hide-prompt)
+chosen=$(echo "$options" | fuzzel --dmenu \
+    --width 22 \
+    --lines 6 \
+    --anchor top-right \
+    --hide-prompt)
 
 case "$chosen" in
-    "⏻ Shutdown")
+    "󰐥  Shutdown")
         systemctl poweroff
         ;;
-    " Reboot")
+    "󰜉  Reboot")
         systemctl reboot
         ;;
-    " Logout")
+    "󰍃  Logout")
         mmsg -q
         ;;
-    "⏾ Hibernate")
+    "󰤄  Suspend")
+        systemctl suspend
+        ;;
+    "󰒲  Hibernate")
         systemctl hibernate
         ;;
-    " Lock")
-        swaylock -f -c 000000 &
+    "󰌾  Lock")
+        swaylock -f -c 000000
         ;;
 esac
